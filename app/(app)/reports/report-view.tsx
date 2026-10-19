@@ -88,8 +88,8 @@ export function ReportView() {
 
           <div className="mt-3 grid gap-3 md:grid-cols-2">
             <Card tone="cash-in" order={3} title="Cash-in" count={summary.cashIn.count}>
-              <Line label="Cash you received from customers" value={summary.cashIn.principalCentavos} />
-              <Line label="Sent from your wallet to theirs" value={summary.cashIn.principalCentavos} />
+              <Line label="Cash received from customers" value={summary.cashIn.principalCentavos} />
+              <Line label="Sent to their wallets" value={summary.cashIn.principalCentavos} />
               <Line label="Fees collected" value={summary.cashIn.feeCentavos} />
             </Card>
             <Card tone="cash-out" order={4} title="Cash-out" count={summary.cashOut.count}>

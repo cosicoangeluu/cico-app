@@ -207,7 +207,7 @@ function PendingWork({
                 <>
                   <p>
                     They typed: name <strong>{note.name || "not given"}</strong>,
-                    reference <strong className="break-all">{note.reference || "not given"}</strong>.
+                    reference <strong className="break-words">{note.reference || "not given"}</strong>.
                   </p>
                   <button
                     type="button"

@@ -24,7 +24,7 @@ export function MoneyInput({
       <span
         aria-hidden
         className={`pointer-events-none absolute inset-y-0 left-4 flex items-center font-medium text-muted ${
-          large ? "text-lead" : ""
+          large ? "text-head" : ""
         }`}
       >
         ₱
@@ -39,7 +39,7 @@ export function MoneyInput({
         aria-invalid={invalid || undefined}
         aria-describedby={invalid ? `${id}-error` : undefined}
         onChange={(event) => onChange(event.target.value, parsePesos(event.target.value))}
-        className={`field pl-10 ${large ? "h-18! text-head! font-medium" : ""}`}
+        className={`field ${large ? "h-18 pl-[calc(1.25rem+0.75em)] text-head font-medium" : "pl-10"}`}
       />
     </div>
   );
