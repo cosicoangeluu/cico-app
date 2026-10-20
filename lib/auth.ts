@@ -1,5 +1,4 @@
 import "server-only";
-import { cache } from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { isSupabaseConfigured } from "@/lib/env";
@@ -11,8 +10,17 @@ export type Operator = {
   email: string;
 };
 
-/** The signed-in operator, or a redirect to the sign-in page. */
-export const requireOperator = cache(async (): Promise<Operator> => {
+/**
+ * The signed-in operator, or a redirect to the sign-in page.
+ *
+ * Checking a Supabase session compares the token's expiry with the current
+ * time, which Next.js refuses while prerendering (partial prefetching
+ * prerenders with the visitor's cookies). A private cache scope may read
+ * both; its result stays in this visitor's browser, never a server cache.
+ * Only a resolved operator is cached: redirect() throws.
+ */
+export async function requireOperator(): Promise<Operator> {
+  "use cache: private";
   if (!isSupabaseConfigured) {
     const inDemo =
       demoAvailable && (await cookies()).get(DEMO_COOKIE)?.value === "1";
@@ -27,4 +35,4 @@ export const requireOperator = cache(async (): Promise<Operator> => {
   if (!claims?.sub) redirect("/login");
 
   return { id: claims.sub, email: String(claims.email ?? "") };
-});
+}

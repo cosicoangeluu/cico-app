@@ -1,5 +1,6 @@
 import { Suspense, type ReactNode } from "react";
 import Link from "next/link";
+import { io } from "next/cache";
 import { ArrowRight, Banknote, Clock, Wallet, type LucideIcon } from "lucide-react";
 import { requireOperator } from "@/lib/auth";
 import { demoAvailable } from "@/lib/demo/mode";
@@ -110,6 +111,9 @@ function ActionTile({
 
 async function PendingCount() {
   await requireOperator();
+  // A live count: never prerender it. The Supabase client also checks the
+  // session's expiry against the current time before each query.
+  await io();
   const supabase = await createClient();
   const { count, error } = await supabase
     .from("transactions")
