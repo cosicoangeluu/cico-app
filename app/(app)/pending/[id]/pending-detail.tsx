@@ -79,6 +79,7 @@ function PendingWork({
 }) {
   const note = transaction.receipt?.senderNote ?? null;
   const [reference, setReference] = useState(transaction.referenceNumber || note?.reference || "");
+  const [scannedReference, setScannedReference] = useState<string | null>(null);
   const [sender, setSender] = useState(transaction.senderName || note?.name || "");
   const [receiver, setReceiver] = useState(transaction.receiverName);
   const when = useTransferTime(transaction.transferredAt);
@@ -232,6 +233,14 @@ function PendingWork({
             <ReceiptPicker
               image={transaction.receipt?.imageUrl ?? null}
               onChange={setOperatorReceipt}
+              expectedCentavos={transaction.principalCentavos}
+              onScan={(reading) => {
+                if (reading.reference && !reference.trim()) {
+                  setReference(reading.reference);
+                  setScannedReference(reading.reference);
+                }
+                when.fillScanned(reading.date, reading.time);
+              }}
             />
             {savingPhoto && (
               <p role="status" className="mt-3 flex items-center gap-2 text-muted">
@@ -248,7 +257,11 @@ function PendingWork({
           <Field
             id="reference"
             label="Reference number"
-            hint="Copy it from your wallet history, including any zeroes at the start."
+            hint={
+              reference && reference === scannedReference
+                ? "Read from the photo. Check every digit against your wallet history."
+                : "Copy it from your wallet history, including any zeroes at the start."
+            }
             error={
               conflict
                 ? `Already recorded on another cash-out (${formatPesos(conflict.principalCentavos)}, ${conflict.receiverName}). Each transfer can only be paid out once.`

@@ -12,9 +12,10 @@ CICO doesn't move any money. The operator still does every transfer in their own
 
 ## Contents
 
-- [Why CICO exists](#why-cico-exists)
-- [Features](#features)
+- [The Problem](#the-problem)
 - [How it works](#how-it-works)
+- [Results](#results)
+- [Features](#features)
 - [Screenshots](#screenshots)
 - [Tech stack](#tech-stack)
 - [Architecture](#architecture)
@@ -25,16 +26,70 @@ CICO doesn't move any money. The operator still does every transfer in their own
 
 ---
 
-## Why CICO exists
+## The Problem
 
 Many cash-in / cash-out counters keep their records in a paper notebook or a chat thread. That leads to the same few problems:
 
 - **Fees get mixed into the amount.** The operator's earnings and the customer's money end up in one number, so it's hard to know what the counter actually made.
-- **Cash gets handed out twice.** A customer shows a screenshot of a transfer that was already paid out, or one that never arrived.
+- **Fees are inconsistent.** Without a fixed table, the fee for the same amount can change from one customer to the next, and old records can't show which rate applied.
+- **Cash gets handed out twice.** A customer shows a screenshot of a transfer that was already paid out, or one that never arrived, and the operator loses real cash.
 - **Remote senders are messy.** The person collecting the cash is often not the person sending the money, so receipts arrive through chat and get lost.
 - **Daily totals take time.** Adding up a day, week or month by hand is slow and easy to get wrong.
+- **Records can be changed later.** A notebook entry can be crossed out or rewritten with no trace.
 
-CICO handles each of these: the fee always stays separate, each transfer reference can be paid out only once, remote senders get their own upload link, and reports add themselves up.
+---
+
+## How it works
+
+CICO answers each problem with one rule, and enforces that rule in the database, not just on screen.
+
+| Problem | How CICO solves it |
+|---|---|
+| Fees mixed into the amount | The fee is always stored and shown **separately** from the amount, and is always paid on top. |
+| Inconsistent fees | The operator sets a **fee table** once. CICO looks up the fee automatically and saves the rule it used with each record, so later changes never alter old records. |
+| Cash handed out twice | Each transfer **reference number can be paid out only once**. Before completing a cash-out, the operator must confirm the money is in their own wallet. |
+| Remote senders | A pending cash-out gets a private **upload link**. The sender uploads their receipt there, and the link shows only the amount and the receiver's first name. |
+| Manual totals | **Reports** add up today, this week, this month or any date range, with money moved and fees earned shown separately. |
+| Records changed later | Saved records **can't be edited or deleted**, and all writes go through checked database functions. |
+
+### The money flow
+
+The fee is **always paid on top** of the amount, never taken out of it.
+
+| | Customer pays | Customer gets |
+|---|---|---|
+| **Cash-in** (₱1,000, ₱10 fee) | ₱1,000 cash + ₱10 fee | ₱1,000 in their wallet |
+| **Cash-out** (₱1,000, ₱10 fee) | ₱1,000 wallet transfer + ₱10 fee | ₱1,000 cash |
+
+*Example amounts only. Real fees come from the operator's fee table.*
+
+### The three workflows
+
+1. **Cash-in:** type the amount → CICO shows the fee → collect amount + fee → send from your wallet → add receipt and reference → save (completed).
+2. **Cash-out, customer sends:** type the amount → customer sends to your wallet → **check your own wallet history** → add reference → collect fee, hand over cash → complete.
+3. **Cash-out, someone else sends:** type the amount and both names → save as pending → share the upload link → sender transfers and uploads the receipt → **check your own wallet history** → collect fee from the receiver, hand over cash → complete.
+
+### Three rules CICO is built around
+
+1. The fee is always on top.
+2. Check your own wallet before cash goes out. A receipt or screenshot alone isn't proof.
+3. Never share a PIN, password or one-time code. CICO never asks for them.
+
+---
+
+## Results
+
+What the finished app delivers:
+
+- **Duplicate payouts are blocked at the database level.** A unique index on the reference number means the same transfer can't be paid out on two cash-outs, even if the screen is bypassed.
+- **Every peso is exact.** Amounts are stored as whole centavos, so totals never pick up rounding errors.
+- **Fees are consistent and traceable.** Every record shows the fee it was charged and the fee rule that applied at the time.
+- **Income is clear at a glance.** Reports separate the operator's fee income from the customers' money passing through.
+- **Remote cash-outs have a clean paper trail.** Sender receipts arrive in the app, attached to the right pending cash-out, instead of getting lost in chat.
+- **History can't be rewritten.** Saved records are read-only, and each operator can see only their own data.
+- **Works on any device.** The same app runs on a phone at the counter and on a computer at home, with records synced through Supabase.
+- **Easy to try.** Demo mode runs every feature without setting up a database.
+- **Tested core logic.** 50 unit tests cover fee lookup, transaction rules, report totals, money math and Manila-time date handling, and all of them pass.
 
 ---
 
@@ -72,31 +127,6 @@ If no database is connected and the app runs in development, the sign-in page of
 
 ---
 
-## How it works
-
-The fee is **always paid on top** of the amount, never taken out of it.
-
-| | Customer pays | Customer gets |
-|---|---|---|
-| **Cash-in** (₱1,000, ₱10 fee) | ₱1,000 cash + ₱10 fee | ₱1,000 in their wallet |
-| **Cash-out** (₱1,000, ₱10 fee) | ₱1,000 wallet transfer + ₱10 fee | ₱1,000 cash |
-
-*Example amounts only. Real fees come from the operator's fee table.*
-
-### The three workflows
-
-1. **Cash-in:** type the amount → CICO shows the fee → collect amount + fee → send from your wallet → add receipt and reference → save (completed).
-2. **Cash-out, customer sends:** type the amount → customer sends to your wallet → **check your own wallet history** → add reference → collect fee, hand over cash → complete.
-3. **Cash-out, someone else sends:** type the amount and both names → save as pending → share the upload link → sender transfers and uploads the receipt → **check your own wallet history** → collect fee from the receiver, hand over cash → complete.
-
-### Three rules CICO is built around
-
-1. The fee is always on top.
-2. Check your own wallet before cash goes out. A receipt or screenshot alone isn't proof.
-3. Never share a PIN, password or one-time code. CICO never asks for them.
-
----
-
 ## Screenshots
 
 | Desktop | |
@@ -125,6 +155,7 @@ The fee is **always paid on top** of the amount, never taken out of it.
 | Database | [Supabase](https://supabase.com) Postgres with row-level security and `security definer` SQL functions |
 | Auth | Supabase Auth (email + password) through [`@supabase/ssr`](https://supabase.com/docs/guides/auth/server-side) with cookie sessions |
 | File storage | Supabase Storage (private `receipts` bucket) |
+| Receipt scanning | [Tesseract.js 7](https://github.com/naptha/tesseract.js) OCR in the browser |
 | Testing | [Vitest 5](https://vitest.dev) |
 | Linting | ESLint 9 with `eslint-config-next` |
 | Hosting | [Vercel](https://vercel.com), Singapore region (`sin1`), close to users in the Philippines |
@@ -263,7 +294,8 @@ proxy.ts            Session refresh on every request
 
 Working today: sign-in, cash-in, cash-out, pending cash-outs, the sender upload link, history, reports, fee rules, the Overview guide, phone and PC layouts, and demo mode.
 
+Receipt scanning reads the reference number, date and time off a photo with [Tesseract.js](https://tesseract.projectnaptha.com), on the device, and fills in the empty boxes. It also warns when the amount on the photo differs from the one entered. Every field stays editable, and nothing is saved without the operator.
+
 Not built yet:
-- **Receipt scanning (OCR)** to read the reference, amount and time off a photo automatically. For now, details are typed while looking at the photo.
 - **QR codes** for the sender upload link.
 - **Editing, cancelling or deleting** saved records. These are blocked on purpose until the right rules are decided.

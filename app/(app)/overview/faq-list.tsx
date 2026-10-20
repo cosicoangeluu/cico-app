@@ -59,10 +59,12 @@ const questions: { q: string; a: ReactNode }[] = [
     q: "What if receipt scanning reads the details incorrectly?",
     a: (
       <p>
-        Scanning isn&apos;t available yet, so CICO doesn&apos;t read the
-        receipt for you. You type the details while looking at the photo, and
-        every field can be corrected before you save. When scanning arrives,
-        its results will be just as editable.
+        Fix it before you save. Scanning only fills in boxes; it never saves
+        anything by itself, and every box can be changed like anything you
+        typed. It reads on your phone, so glare, blur or a cut-off photo can
+        swap a digit. Check the reference number most carefully, since it is
+        what stops one transfer being paid out twice. If a photo reads badly,
+        remove it and retake it, or just type the details.
       </p>
     ),
   },

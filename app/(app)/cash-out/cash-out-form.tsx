@@ -87,6 +87,7 @@ function CashOutSteps({ onSaved }: { onSaved: (t: Transaction) => void }) {
 
   const [image, setImage] = useState<string | null>(null);
   const [reference, setReference] = useState("");
+  const [scannedReference, setScannedReference] = useState<string | null>(null);
   const when = useTransferTime();
   const [verified, setVerified] = useState(false);
   const [released, setReleased] = useState(false);
@@ -256,12 +257,27 @@ function CashOutSteps({ onSaved }: { onSaved: (t: Transaction) => void }) {
           {arrived === true && (
             <Panel title="The transfer you received" order={4}>
               <div className="grid gap-6 lg:grid-cols-2">
-                <ReceiptPicker image={image} onChange={setImage} />
+                <ReceiptPicker
+                  image={image}
+                  onChange={setImage}
+                  expectedCentavos={amount.centavos}
+                  onScan={(reading) => {
+                    if (reading.reference && !reference.trim()) {
+                      setReference(reading.reference);
+                      setScannedReference(reading.reference);
+                    }
+                    when.fillScanned(reading.date, reading.time);
+                  }}
+                />
                 <div className="space-y-5">
                   <Field
                     id="reference"
                     label="Reference number"
-                    hint="Type it exactly, including any zeroes at the start."
+                    hint={
+                      reference && reference === scannedReference
+                        ? "Read from the photo. Check every digit before you save."
+                        : "Type it exactly, including any zeroes at the start."
+                    }
                     error={
                       tried && missing.reference
                         ? missing.reference

@@ -7,11 +7,23 @@ import { Field } from "@/components/ui";
 /** Date and time of a wallet transfer, typed in Philippine time. Defaults to now. */
 export function useTransferTime(initialIso?: string | null) {
   const [parts, setParts] = useState(() => manilaParts(initialIso ?? new Date()));
+  const [typed, setTyped] = useState(Boolean(initialIso));
   return {
     date: parts.date,
     time: parts.time,
-    setDate: (date: string) => setParts((p) => ({ ...p, date })),
-    setTime: (time: string) => setParts((p) => ({ ...p, time })),
+    setDate: (date: string) => {
+      setTyped(true);
+      setParts((p) => ({ ...p, date }));
+    },
+    setTime: (time: string) => {
+      setTyped(true);
+      setParts((p) => ({ ...p, time }));
+    },
+    /** Takes a scanned date and time, unless the operator already typed their own. */
+    fillScanned: (date: string | null, time: string | null) => {
+      if (typed) return;
+      setParts((p) => ({ date: date ?? p.date, time: time ?? p.time }));
+    },
     iso: manilaToIso(parts.date, parts.time),
   };
 }

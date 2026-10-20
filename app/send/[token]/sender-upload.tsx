@@ -125,7 +125,14 @@ export function SenderUpload({ token }: { token: string }) {
       </section>
 
       <section className="rise mt-3 space-y-5 rounded-ui bg-surface p-5 sm:p-8" style={{ "--i": 1 } as React.CSSProperties}>
-        <ReceiptPicker image={image} onChange={setImage} />
+        <ReceiptPicker
+          image={image}
+          onChange={setImage}
+          expectedCentavos={request.amountCentavos}
+          onScan={(reading) => {
+            if (reading.reference && !reference.trim()) setReference(reading.reference);
+          }}
+        />
         <Field id="name" label="Your name" error={tried && !name.trim() ? "Enter your name." : null}>
           <input
             id="name"

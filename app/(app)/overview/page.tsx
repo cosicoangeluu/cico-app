@@ -83,15 +83,15 @@ export default function OverviewPage() {
             <p className="font-medium">Ready</p>
             <p>
               Cash-in, cash-out, pending cash-outs, the sender&apos;s
-              receipt-upload link, history, reports and fee rules.
+              receipt-upload link, receipt scanning, history, reports and fee
+              rules.
             </p>
           </div>
           <div>
             <p className="font-medium">Not yet</p>
             <p>
-              Receipt <em>scanning</em> (reading the details off a photo for
-              you) and QR codes for the sender link. For now you type the
-              details while looking at the photo.
+              QR codes for the sender link. Scanning can misread a blurry or
+              glary photo, so always check what it filled in.
             </p>
           </div>
         </div>
@@ -162,10 +162,11 @@ export default function OverviewPage() {
           Set your own amount ranges and fees. Change them when rates change.
           Past records keep their fee.
         </Feature>
-        <Feature icon={Camera} title="Receipt photos and manual entry" status="Scanning not yet">
-          Take a photo or upload a picture of the receipt and keep it beside the
-          form while you type. No receipt? Type the details from your wallet
-          history.
+        <Feature icon={Camera} title="Receipt scanning and manual entry" ready>
+          Take a photo or upload a picture of the receipt. CICO reads the
+          reference number, date and time on your phone and fills in the empty
+          boxes, and warns if the amount looks different. Every box stays
+          editable. No receipt? Type the details from your wallet history.
         </Feature>
         <Feature icon={LinkIcon} title="Sender upload link" status="QR code not yet">
           When someone else sends the money, give them a link to upload their
