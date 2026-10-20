@@ -44,6 +44,7 @@ function CashInSteps({ onSaved }: { onSaved: (t: Transaction) => void }) {
   const [reference, setReference] = useState("");
   const [scannedReference, setScannedReference] = useState<string | null>(null);
   const [customer, setCustomer] = useState("");
+  const [scannedCustomer, setScannedCustomer] = useState<string | null>(null);
   const when = useTransferTime();
   const [paid, setPaid] = useState(false);
   const [sent, setSent] = useState(false);
@@ -125,6 +126,11 @@ function CashInSteps({ onSaved }: { onSaved: (t: Transaction) => void }) {
                     setReference(reading.reference);
                     setScannedReference(reading.reference);
                   }
+                  // The receipt of a cash-in shows who received it: the customer.
+                  if (reading.name && !customer.trim()) {
+                    setCustomer(reading.name);
+                    setScannedCustomer(reading.name);
+                  }
                   when.fillScanned(reading.date, reading.time);
                 }}
               />
@@ -149,6 +155,11 @@ function CashInSteps({ onSaved }: { onSaved: (t: Transaction) => void }) {
                 <Field
                   id="customer"
                   label="Customer (wallet owner)"
+                  hint={
+                    customer && customer === scannedCustomer
+                      ? "Read from the photo. The dots hide letters: type the full name if you know it."
+                      : undefined
+                  }
                   error={tried ? missing.customer : null}
                 >
                   <input

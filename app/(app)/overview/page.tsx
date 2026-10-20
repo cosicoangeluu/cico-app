@@ -164,8 +164,8 @@ export default function OverviewPage() {
         </Feature>
         <Feature icon={Camera} title="Receipt scanning and manual entry" ready>
           Take a photo or upload a picture of the receipt. CICO reads the
-          reference number, date and time on your phone and fills in the empty
-          boxes, and warns if the amount looks different. Every box stays
+          masked name, reference number, date and time on your phone, fills in
+          the empty boxes, and warns if the amount looks different. Every box stays
           editable. No receipt? Type the details from your wallet history.
         </Feature>
         <Feature icon={LinkIcon} title="Sender upload link" status="QR code not yet">

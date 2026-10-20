@@ -7,6 +7,8 @@ import { parsePesos } from "@/lib/money";
  */
 export type ReceiptReading = {
   reference: string | null;
+  /** The account name, masked as the wallet prints it, e.g. "MA•••N JO•N B.". */
+  name: string | null;
   amountCentavos: number | null;
   /** "YYYY-MM-DD", as printed (receipts show Philippine time). */
   date: string | null;
@@ -32,7 +34,38 @@ export function parseReceiptText(text: string): ReceiptReading {
     .map((line) => line.replace(/\s+/g, " ").trim())
     .filter(Boolean);
   const { date, time } = findDateTime(lines.join("\n"));
-  return { reference: findReference(lines), amountCentavos: findAmount(lines), date, time };
+  return {
+    reference: findReference(lines),
+    name: findName(lines),
+    amountCentavos: findAmount(lines),
+    date,
+    time,
+  };
+}
+
+/** A Philippine mobile number: "+63 951 449 2639", "0951 449 2639". */
+const MOBILE = /(?:\+?63|0)\s*9\d{2}\s*\d{3}\s*\d{4}/;
+
+/**
+ * The account name, printed just above the mobile number. Wallets print
+ * names in capitals and hide letters behind dots ("MA•••N JO•N B."), which
+ * OCR reads as small letters or symbols ("MAeeeN JOeN B."). So in a
+ * capitalised name, every small letter or symbol is put back as a dot.
+ */
+function findName(lines: string[]): string | null {
+  const phone = lines.findIndex((line) => MOBILE.test(line));
+  if (phone < 1) return null;
+  const line = lines[phone - 1];
+  if ((line.match(/[A-Z]/g)?.length ?? 0) < 3) return null;
+  const name = line
+    .replace(/[^A-Za-z.\s•*·°]/g, "")
+    .replace(/[a-z•*·°]/g, "•")
+    .replace(/\s+/g, " ")
+    .trim();
+  // Too short, or under a quarter real letters, means a misread.
+  const characters = name.replace(/[\s.]/g, "").length;
+  const capitals = name.match(/[A-Z]/g)?.length ?? 0;
+  return characters >= 4 && capitals * 4 >= characters ? name : null;
 }
 
 /** "1O23" -> "1023". Null for words, or for tokens with no real digit in them. */
@@ -108,10 +141,10 @@ function isoDate(year: number, month: number, day: number): string | null {
 const monthNumber = (name: string) => MONTHS.indexOf(name.slice(0, 3).toLowerCase()) + 1;
 
 const DATE_FORMATS: [RegExp, (m: RegExpMatchArray) => string | null][] = [
-  // "Oct 20, 2026" / "October 20 2026"
-  [/\b([A-Za-z]{3,9})\.? (\d{1,2}),? (\d{4})\b/g, (m) => isoDate(+m[3], monthNumber(m[1]), +m[2])],
+  // "Oct 20, 2026" / "October 20 2026" / "Oct 16,2026" (GCash has no space after the comma)
+  [/\b([A-Za-z]{3,9})\.? ?(\d{1,2}),? ?(\d{4})\b/g, (m) => isoDate(+m[3], monthNumber(m[1]), +m[2])],
   // "20 Oct 2026"
-  [/\b(\d{1,2}) ([A-Za-z]{3,9})\.?,? (\d{4})\b/g, (m) => isoDate(+m[3], monthNumber(m[2]), +m[1])],
+  [/\b(\d{1,2}) ?([A-Za-z]{3,9})\.?,? ?(\d{4})\b/g, (m) => isoDate(+m[3], monthNumber(m[2]), +m[1])],
   // "2026-10-20" / "2026/10/20"
   [/\b(\d{4})[-/](\d{1,2})[-/](\d{1,2})\b/g, (m) => isoDate(+m[1], +m[2], +m[3])],
   // "10/20/2026" (the Philippines writes the month first)

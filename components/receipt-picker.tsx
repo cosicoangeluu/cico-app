@@ -145,10 +145,10 @@ export function ReceiptPicker({
 
       {onScan && !image && (
         <p className="text-small text-muted">
-          CICO reads the reference number, date and time from the photo and
-          fills in the empty boxes. Hold steady, avoid glare, and fit the whole
-          receipt in the frame. No receipt? Type the details from your wallet
-          history.
+          CICO reads the name, reference number, amount, date and time from
+          the photo and fills in the empty boxes. Hold steady, avoid glare, and
+          fit the whole receipt in the frame. No receipt? Type the details from
+          your wallet history.
         </p>
       )}
     </div>
@@ -179,9 +179,10 @@ function ScanResult({
     );
   }
 
-  const { reference, amountCentavos, date, time } = scan.reading;
+  const { reference, name, amountCentavos, date, time } = scan.reading;
   const iso = date && time ? manilaToIso(date, time) : null;
   const found = [
+    name,
     reference && `reference ${reference}`,
     amountCentavos !== null && formatPesos(amountCentavos),
     iso && formatManilaDateTime(iso),

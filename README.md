@@ -294,7 +294,7 @@ proxy.ts            Session refresh on every request
 
 Working today: sign-in, cash-in, cash-out, pending cash-outs, the sender upload link, history, reports, fee rules, the Overview guide, phone and PC layouts, and demo mode.
 
-Receipt scanning reads the reference number, date and time off a photo with [Tesseract.js](https://tesseract.projectnaptha.com), on the device, and fills in the empty boxes. It also warns when the amount on the photo differs from the one entered. Every field stays editable, and nothing is saved without the operator.
+Receipt scanning reads the masked account name, reference number, amount, date and time off a photo with [Tesseract.js](https://tesseract.projectnaptha.com), on the device, and fills in the empty boxes. It also warns when the amount on the photo differs from the one entered. Every field stays editable, and nothing is saved without the operator.
 
 Not built yet:
 - **QR codes** for the sender upload link.

@@ -1,16 +1,62 @@
 import { describe, expect, it } from "vitest";
 import { parseReceiptText } from "./parse";
 
-// Shaped like real OCR output: odd spacing, stray symbols, misread characters.
-const GCASH = `
+// Tesseract's actual output for GCash receipt screenshots. Phone numbers,
+// reference numbers and name letters are changed; the OCR quirks are kept:
+// mask dots read as small letters, "₱" read as "£" or "$", no space in "16,2026".
+const GCASH_SCREENSHOTS = [
+  {
+    text: `MAeeeN JOeN B.
++63 900 000 1111
 Sent via GCash
-JU*N D*L* C*UZ
-+63 917 123 4567
-Amount 1,000.00
-Total Amount Sent ₱1,000.00
-Ref No. 0012 345 678901 Oct 20, 2026 2:31 PM
-`;
+Amount 150.00
+Total Amount Sent £150.00
+Ref No. 1234 176 598482 Oct 16,2026 9:19 AM
+`,
+    expected: {
+      reference: "1234176598482",
+      name: "MA•••N JO•N B.",
+      amountCentavos: 15000,
+      date: "2026-10-16",
+      time: "09:19",
+    },
+  },
+  {
+    text: `©
+NAeH ANeeoeY B.
++63 900 000 2222
+Sent via GCash
+Amount 4,000.00
+Total Amount Sent $4,000.00
+Ref No. 1234 032 650064 Oct 12,2026 11:34 AM
+`,
+    expected: {
+      reference: "1234032650064",
+      name: "NA•H AN••••Y B.",
+      amountCentavos: 400000,
+      date: "2026-10-12",
+      time: "11:34",
+    },
+  },
+  {
+    text: `DAeeceoE ERee AD.
++63 900 000 3333
+Sent via GCash
+Amount 190.00
+Total Amount Sent £190.00
+Ref No. 1234 186 440194 Oct 16,2026 1:46 PM
+`,
+    expected: {
+      reference: "1234186440194",
+      name: "DA•••••E ER•• AD.",
+      amountCentavos: 19000,
+      date: "2026-10-16",
+      time: "13:46",
+    },
+  },
+];
 
+// Shaped like real OCR output: odd spacing, stray symbols, misread characters.
 const MAYA = `
 Transfer successful
 ₱ 500.00
@@ -28,40 +74,15 @@ Amount PHP 2,500.50
 Available Balance PHP 99,999.00
 `;
 
-// Tesseract's actual output for a tilted, softened photo of a GCash-style receipt.
-const TESSERACT_PHOTO = `Sent via GCash
-JUN D*L* cuz
-+63 917 123 4567
-Amount 1,000.00
-Send Fee 0.00
-Total Amount Sent
-1,000.00
-Ref No. 0012 345 678901
-Oct 20, 2026 2:31 PM
-`;
-
 describe("parseReceiptText", () => {
-  it("reads real Tesseract output from a phone photo", () => {
-    expect(parseReceiptText(TESSERACT_PHOTO)).toEqual({
-      reference: "0012345678901",
-      amountCentavos: 100000,
-      date: "2026-10-20",
-      time: "14:31",
-    });
-  });
-
-  it("reads a GCash receipt with the date on the reference line", () => {
-    expect(parseReceiptText(GCASH)).toEqual({
-      reference: "0012345678901",
-      amountCentavos: 100000,
-      date: "2026-10-20",
-      time: "14:31",
-    });
+  it.each(GCASH_SCREENSHOTS)("reads a GCash screenshot ($expected.reference)", ({ text, expected }) => {
+    expect(parseReceiptText(text)).toEqual(expected);
   });
 
   it("reads a Maya receipt, fixing letters misread as digits and skipping the fee", () => {
     expect(parseReceiptText(MAYA)).toEqual({
       reference: "102345678912",
+      name: null,
       amountCentavos: 50000,
       date: "2026-10-20",
       time: "14:31",
@@ -71,6 +92,7 @@ describe("parseReceiptText", () => {
   it("reads a bank receipt with a letter-and-digit reference and skips the balance", () => {
     expect(parseReceiptText(BANK)).toEqual({
       reference: "AB12CD34EF56",
+      name: null,
       amountCentavos: 250050,
       date: "2026-10-20",
       time: "14:05",
@@ -81,9 +103,14 @@ describe("parseReceiptText", () => {
     expect(parseReceiptText("Transaction Date 10/20/2026").reference).toBeNull();
   });
 
+  it("doesn't take a lowercase line above the number for a name", () => {
+    expect(parseReceiptText("sent via gcash\n+63 900 000 1111").name).toBeNull();
+  });
+
   it("leaves everything blank when the photo is unreadable", () => {
     expect(parseReceiptText("~~ ,,  %%\n  ")).toEqual({
       reference: null,
+      name: null,
       amountCentavos: null,
       date: null,
       time: null,
