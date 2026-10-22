@@ -59,7 +59,7 @@ export default function LoginPage({ searchParams }: PageProps<"/login">) {
 
           {isSupabaseConfigured ? (
             <div className="rise" style={stagger(3)}>
-              <Suspense fallback={<LoginForm next="/" />}>
+              <Suspense fallback={<LoginForm next="/dashboard" />}>
                 <LoginFormWithNext searchParams={searchParams} />
               </Suspense>
             </div>
@@ -101,5 +101,5 @@ async function LoginFormWithNext({
   searchParams,
 }: Pick<PageProps<"/login">, "searchParams">) {
   const { next } = await searchParams;
-  return <LoginForm next={typeof next === "string" ? next : "/"} />;
+  return <LoginForm next={typeof next === "string" ? next : "/dashboard"} />;
 }

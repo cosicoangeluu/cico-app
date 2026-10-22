@@ -1,0 +1,112 @@
+.cico-landing { --margin: clamp(20px, 3vw, 48px); --display: clamp(48px, 8.2vw, 126px); --heading: clamp(34px, 4.9vw, 76px); --body: clamp(16px, 1.4vw, 20px); --small: 14px; overflow: clip; font-size: var(--body); background: var(--bg); color: var(--ink); }
+.cico-landing p { line-height: 1.5; }
+.cico-landing h1, .cico-landing h2, .cico-landing h3, .cico-landing p { margin: 0; }
+.cico-landing h1, .cico-landing h2 { font-weight: 500; letter-spacing: -.055em; line-height: .98; text-wrap: initial; }
+.cico-landing h2 { font-size: var(--heading); }
+.cico-landing a, .cico-landing button { transition: transform 180ms var(--ease-out), background-color 180ms, color 180ms; }
+.cico-landing a:active, .cico-landing button:active { transform: scale(.98); }
+.cico-landing a:focus-visible, .cico-landing button:focus-visible, .cico-landing summary:focus-visible { outline: 3px solid currentColor; outline-offset: 6px; }
+.cico-skip { position: fixed; top: -100px; left: 20px; z-index: 20; background: var(--night); color: var(--night-ink); padding: 16px; }
+.cico-skip:focus { top: 16px; }
+.cico-nav { display: flex; align-items: center; justify-content: space-between; padding: 25px var(--margin); gap: 30px; }
+.cico-logo { display: flex; align-items: end; font-size: 38px; line-height: 1; letter-spacing: -.07em; font-family: var(--font-headline); }
+.cico-logoDot { width: 9px; height: 9px; background: var(--cash-in); border-radius: 50%; margin: 0 0 4px 5px; }
+.cico-nav nav { display: flex; gap: 36px; font-size: 16px; }
+.cico-nav nav a:hover, .cico-footer nav a:hover { text-decoration: underline; text-underline-offset: 5px; }
+.cico-signIn { display: flex; align-items: center; gap: 18px; font-size: 16px; }
+.cico-hero { padding: 52px var(--margin) 0; }
+.cico-heroTop { display: grid; grid-template-columns: 1.5fr 1fr; gap: 7%; align-items: end; padding-bottom: 62px; }
+.cico-hero h1 { font-size: var(--display); }
+.cico-heroIntro { padding-bottom: 4px; max-width: 35ch; }
+.cico-heroIntro > p:first-child { margin-bottom: 28px; }
+.cico-action { display: inline-flex; align-items: center; justify-content: space-between; gap: 34px; padding: 17px 26px; min-height: 56px; border-radius: 999px; background: var(--night); color: var(--night-ink); font-size: 16px; cursor: pointer; }
+.cico-action:hover { background: var(--cash-in); color: var(--ink); }
+.cico-small { font-size: var(--small); }
+.cico-heroIntro .cico-small { margin-top: 13px; max-width: 35ch; }
+.cico-heroMedia { background: var(--cash-in); padding: 24px 6.6% 0; overflow: hidden; }
+.cico-mediaCaption { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 22px; font-size: 16px; }
+.cico-mediaCaption a { display: grid; place-items: center; height: 40px; width: 40px; background: var(--ink); color: var(--bg); border-radius: 50%; }
+.cico-heroCrop { max-height: 540px; overflow: hidden; background: var(--bg); }
+.cico-heroCrop img { display: block; width: 100%; height: auto; transform-origin: top center; animation: screen-settle 1200ms var(--ease-out) both; }
+@keyframes screen-settle { from { transform: scale(1.06) translateY(20px); opacity: .3; } to { transform: scale(1); opacity: 1; } }
+.cico-heroFoot { display: flex; justify-content: space-between; padding-top: 16px; font-size: var(--small); }
+.cico-fees { padding: 140px var(--margin); }
+.cico-sectionIntro { display: grid; grid-template-columns: 1fr 1fr; gap: 8%; align-items: start; margin-bottom: 60px; }
+.cico-sectionIntro p { max-width: 41ch; padding-top: 6px; }
+.cico-feeExample { display: grid; grid-template-columns: 1.5fr 1fr; gap: 0; }
+.cico-amountBlock, .cico-feeBlock { display: flex; flex-direction: column; padding: 34px; background: var(--surface); }
+.cico-feeBlock { background: var(--cash-in); justify-content: space-between; }
+.cico-bigNumber { font-family: var(--font-headline); font-size: clamp(64px, 10.8vw, 168px); letter-spacing: -.065em; line-height: 1.15; white-space: nowrap; }
+.cico-amountBlock input { width: 100%; accent-color: var(--ink); cursor: pointer; height: 32px; margin-top: 18px; }
+.cico-rangeLabels { display: flex; justify-content: space-between; gap: 12px; font-size: var(--small); }
+.cico-feeBlock p { font-size: var(--body); }
+.cico-exampleTotal { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; background: var(--night); color: var(--night-ink); padding: 20px 34px; }
+.cico-exampleTotal > span:last-child { font-size: var(--small); }
+.cico-exampleTotal strong { margin-left: 12px; }
+.cico-workflow { display: grid; grid-template-columns: 1fr 1.1fr; gap: 7%; padding: 30px var(--margin) 140px; }
+.cico-workflowCopy > p { margin-top: 28px; max-width: 36ch; }
+.cico-steps { list-style: none; padding: 0; margin-top: 48px; display: grid; gap: 28px; }
+.cico-steps h3 { font-family: var(--font-text); font-size: var(--body); letter-spacing: 0; font-weight: 600; line-height: 1.5; }
+.cico-steps p { max-width: 39ch; margin-top: 6px; }
+.cico-workflowVisual { background: var(--cash-in); position: relative; padding: 42px 0 0 32px; overflow: hidden; align-self: stretch; min-height: 650px; }
+.cico-folderLabel { display: inline-flex; min-width: 130px; padding: 10px 22px; background: var(--bg); clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 100%, 0 100%); font-size: 16px; }
+.cico-workflowCrop { height: 380px; overflow: hidden; }
+.cico-workflowCrop img { width: 850px; max-width: none; height: auto; margin-left: -170px; }
+.cico-receipt { background: var(--field); padding: 28px; width: 85%; margin: 30px 0 -10px; position: relative; clip-path: polygon(0 0,100% 0,100% 95%,95% 100%,90% 95%,85% 100%,80% 95%,75% 100%,70% 95%,65% 100%,60% 95%,55% 100%,50% 95%,45% 100%,40% 95%,35% 100%,30% 95%,25% 100%,20% 95%,15% 100%,10% 95%,5% 100%,0 95%); }
+.cico-receipt > span { font-size: var(--small); }
+.cico-receipt p { font-size: 24px; line-height: 1.3; letter-spacing: -.03em; margin: 14px 0 28px; }
+.cico-receipt svg { position: absolute; right: 22px; top: 22px; }
+.cico-pending { background: var(--pending); display: grid; grid-template-columns: 1.1fr 1fr; gap: 8%; padding: 85px var(--margin); }
+.cico-pendingVisual { overflow: hidden; align-self: center; }
+.cico-pendingCrop { height: 380px; overflow: hidden; }
+.cico-pendingCrop img { width: 920px; max-width: none; height: auto; margin-left: -174px; }
+.cico-pendingCopy { padding-block: 25px; }
+.cico-pendingCopy p { margin-top: 28px; max-width: 37ch; }
+.cico-plainNote { display: flex; gap: 10px; align-items: center; margin-top: 35px; font-size: 16px; font-weight: 500; }
+.cico-reports { padding: 140px var(--margin); }
+.cico-reportImage { background: var(--surface); padding: 45px 6.6% 0; max-height: 650px; overflow: hidden; }
+.cico-reportImage img { display: block; width: 100%; height: auto; }
+.cico-reports > .cico-small { margin-top: 16px; }
+.cico-faq { padding: 0 var(--margin) 140px; display: grid; grid-template-columns: 1fr 1.1fr; gap: 7%; }
+.cico-faq h2 { max-width: 10ch; }
+.cico-faqStack { padding-top: 28px; }
+.cico-faqItem { position: relative; background: var(--surface); margin-top: 26px; }
+.cico-faqItem:nth-child(even) { background: var(--surface-strong); }
+.cico-faqItem summary { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 26px; list-style: none; cursor: pointer; font-weight: 500; }
+.cico-faqItem summary::-webkit-details-marker { display: none; }
+.cico-faqTab { position: absolute; top: -26px; left: 0; padding: 5px 24px; height: 28px; font-size: var(--small); font-weight: 400; background: inherit; clip-path: polygon(10px 0,calc(100% - 10px) 0,100% 100%,0 100%); }
+.cico-faqItem:nth-child(even) .cico-faqTab { left: auto; right: 0; }
+.cico-faqItem .cico-faqTab { background: var(--surface); }
+.cico-faqItem:nth-child(even) .cico-faqTab { background: var(--surface-strong); }
+.cico-plus { font-size: var(--body); line-height: 1; font-weight: 400; }
+.cico-faqItem[open] .cico-plus { transform: rotate(45deg); }
+.cico-faqItem > p { padding: 0 26px 28px; font-size: 16px; max-width: 55ch; }
+.cico-cta { background: var(--cash-in); padding: 38px var(--margin) 30px; }
+.cico-cta > p { max-width: 32ch; }
+.cico-bigAction { display: flex; align-items: center; justify-content: space-between; width: 100%; text-align: left; font-family: var(--font-headline); font-size: clamp(60px, 17vw, 260px); line-height: 1.3; letter-spacing: -.07em; cursor: pointer; }
+.cico-bigAction svg { width: clamp(40px, 10vw, 150px); height: auto; }
+.cico-bigAction:hover { transform: translateX(6px); }
+.cico-footer { background: var(--night); color: var(--night-ink); padding: 48px var(--margin) 24px; }
+.cico-footerTop { display: flex; align-items: start; justify-content: space-between; gap: 30px; font-size: 16px; }
+.cico-footerTop nav { display: grid; gap: 10px; }
+.cico-footerLogo { display: block; font-family: var(--font-headline); font-size: 36vw; letter-spacing: -.09em; line-height: 1; margin: 60px 0 20px -.02em; width: fit-content; }
+.cico-footerBottom { display: flex; justify-content: space-between; font-size: var(--small); }
+@media (min-width: 1800px) { .cico-landing { max-width: 1920px; margin-inline: auto; } }
+@media (max-width: 1000px) { .cico-heroTop { grid-template-columns: 1.3fr 1fr; gap: 5%; }.cico-hero h1 { font-size: 8vw; }.cico-heroIntro { font-size: 16px; }.cico-heroTop { padding-bottom: 40px; }.cico-workflow { gap: 4%; }.cico-workflow h2 { font-size: 4.6vw; }.cico-pending h2 { font-size: 5vw; }.cico-bigNumber { font-size: 10vw; }.cico-workflowVisual { padding-left: 20px; }.cico-receipt { width: 94%; } }
+@media (max-width: 700px) {
+  .cico-nav { padding-block: 22px; gap: 15px; }.cico-nav nav { display: none; }.cico-logo { font-size: 34px; }.cico-signIn { min-height: 44px; }
+  .cico-hero { padding-top: 25px; }.cico-heroTop { grid-template-columns: 1fr; gap: 28px; padding-bottom: 34px; }.cico-hero h1 { font-size: clamp(42px, 10.8vw, 74px); }.cico-heroIntro { max-width: 38ch; }.cico-heroIntro > p:first-child { margin-bottom: 22px; }.cico-heroIntro .cico-small { max-width: none; }
+  .cico-heroMedia { padding: 16px 16px 0; }.cico-mediaCaption { font-size: var(--small); margin-bottom: 16px; gap: 10px; }.cico-mediaCaption a { flex-shrink: 0; }.cico-heroCrop { height: 275px; }.cico-heroCrop img { width: 660px; max-width: none; margin-left: -124px; }.cico-heroFoot { font-size: 13px; }.cico-heroFoot span:last-child { display: none; }
+  .cico-fees { padding: 85px var(--margin); }.cico-sectionIntro { grid-template-columns: 1fr; gap: 24px; margin-bottom: 32px; }.cico-sectionIntro p { padding: 0; }
+  .cico-feeExample { grid-template-columns: 1fr; }.cico-amountBlock, .cico-feeBlock { padding: 24px; }.cico-bigNumber { font-size: 22vw; }.cico-feeBlock { display: grid; grid-template-columns: 1fr 1fr; align-items: center; }.cico-feeBlock .cico-bigNumber { grid-column: 2; grid-row: 1 / 3; justify-self: end; font-size: 20vw; }.cico-feeBlock p { font-size: var(--small); }.cico-rangeLabels { font-size: 13px; }.cico-rangeLabels span:nth-child(2) { font-size: 13px; }.cico-exampleTotal { padding: 22px 24px; }.cico-exampleTotal > span:last-child { font-size: 13px; }
+  .cico-workflow { grid-template-columns: 1fr; gap: 35px; padding: 0 var(--margin) 85px; }.cico-workflow h2 { font-size: var(--heading); }.cico-workflowCopy > p { margin-top: 24px; }.cico-steps { margin-top: 30px; gap: 24px; }.cico-workflowVisual { min-height: 590px; padding: 28px 0 0 20px; }.cico-workflowCrop { height: 330px; }.cico-workflowCrop img { width: 730px; margin-left: -144px; }.cico-receipt { width: 90%; margin-top: 22px; }.cico-receipt p { font-size: 24px; }
+  .cico-pending { grid-template-columns: 1fr; gap: 35px; padding: 50px var(--margin); }.cico-pendingCopy { grid-row: 1; padding: 0; }.cico-pending h2 { font-size: var(--heading); }.cico-pendingCopy p { margin-top: 24px; }.cico-pendingCrop { height: 290px; }.cico-pendingCrop img { width: 730px; margin-left: -138px; }
+  .cico-reports { padding: 85px var(--margin); }.cico-reportImage { padding: 20px 16px 0; height: 360px; }.cico-reportImage img { width: 700px; max-width: none; margin-left: -133px; }
+  .cico-faq { grid-template-columns: 1fr; gap: 32px; padding-bottom: 85px; }.cico-faq h2 { max-width: 12ch; }.cico-faqItem summary { padding: 24px 20px; font-size: 16px; }.cico-faqItem > p { padding-inline: 20px; }.cico-faqStack { padding-top: 0; }
+  .cico-cta { padding-top: 28px; }.cico-bigAction { font-size: 18vw; padding-top: 25px; }.cico-footer { padding-top: 35px; }.cico-footerTop { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }.cico-footerTop > p:last-child { grid-column: 1 / -1; }.cico-footerLogo { margin-top: 40px; font-size: 35vw; }.cico-footerBottom { font-size: 13px; gap: 20px; }
+}
+@media (prefers-reduced-motion: reduce) { .cico-landing *, .cico-landing *::before, .cico-landing *::after { animation: none !important; transition: none !important; }.cico-landing a:hover, .cico-landing button:hover, .cico-landing a:active, .cico-landing button:active { transform: none; } }
+
+.cico-revealed { animation: cico-reveal 650ms var(--ease-out) both; }
+@keyframes cico-reveal { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .cico-revealed { animation: none; } }

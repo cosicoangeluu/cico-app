@@ -7,6 +7,7 @@ import {
   Camera,
   ChartColumn,
   CircleQuestionMark,
+  CircleDollarSign,
   Clock,
   House,
   LayoutGrid,
@@ -15,7 +16,9 @@ import {
   Lock,
   ReceiptText,
   Route,
+  ShieldCheck,
   Smartphone,
+  Users,
   Wallet,
   type LucideIcon,
 } from "lucide-react";
@@ -111,15 +114,15 @@ export default function OverviewPage() {
         </p>
       </Section>
       <div className="mt-3 grid gap-3 md:grid-cols-3">
-        <Benefit mark="You" title="Made for the operator">
+        <Benefit icon={Users} title="Made for the operator">
           The person behind the counter signs in and uses CICO. Customers
           don&apos;t need an account.
         </Benefit>
-        <Benefit mark="₱" title="Fees are never guessed">
+        <Benefit icon={CircleDollarSign} title="Fees are never guessed">
           CICO works out the fee from your own fee table and always keeps it
           apart from the amount.
         </Benefit>
-        <Benefit mark="1×" title="Each transfer pays out once">
+        <Benefit icon={ShieldCheck} title="Each transfer pays out once">
           A transfer reference already used on another cash-out is blocked, so
           cash can&apos;t go out twice.
         </Benefit>
@@ -334,14 +337,22 @@ function Section({
   );
 }
 
-function Benefit({ mark, title, children }: { mark: string; title: string; children: ReactNode }) {
+function Benefit({
+  icon: Icon,
+  title,
+  children,
+}: {
+  icon: LucideIcon;
+  title: string;
+  children: ReactNode;
+}) {
   return (
-    <article className="flex min-h-52 flex-col gap-4 rounded-ui bg-field p-6 sm:p-8">
-      <span className="font-display text-head leading-none font-light tracking-[-0.04em]">
-        {mark}
-      </span>
-      <h3 className="text-lead font-medium">{title}</h3>
-      <p>{children}</p>
+    <article className="flex min-h-52 flex-col justify-between gap-8 rounded-ui bg-field p-6 sm:p-8">
+      <div>
+        <h3 className="text-lead font-medium">{title}</h3>
+        <p className="mt-3">{children}</p>
+      </div>
+      <Icon aria-hidden className="size-12" strokeWidth={1.5} />
     </article>
   );
 }

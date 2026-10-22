@@ -16,7 +16,7 @@ function safeNextPath(value: FormDataEntryValue | null) {
   const path = typeof value === "string" ? value : "";
   return path.startsWith("/") && !path.startsWith("//") && !path.startsWith("/\\")
     ? path
-    : "/";
+    : "/dashboard";
 }
 
 export async function signIn(
@@ -64,5 +64,5 @@ export async function enterDemo() {
     sameSite: "lax",
     path: "/",
   });
-  redirect("/");
+  redirect("/dashboard");
 }

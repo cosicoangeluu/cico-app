@@ -29,7 +29,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         {demoAvailable && <DemoBanner />}
         <header className="flex h-16 items-center px-4 sm:px-8 lg:hidden">
           <Link
-            href="/"
+            href="/dashboard"
             className="font-display text-[2rem] font-light leading-none tracking-[-0.04em]"
           >
             CICO

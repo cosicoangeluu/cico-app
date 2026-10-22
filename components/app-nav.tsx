@@ -20,7 +20,7 @@ import { signOut } from "@/lib/auth-actions";
 type NavItem = { href: string; label: string; icon: LucideIcon };
 
 const primaryItems: NavItem[] = [
-  { href: "/", label: "Home", icon: House },
+  { href: "/dashboard", label: "Home", icon: House },
   { href: "/pending", label: "Pending", icon: Clock },
   { href: "/history", label: "History", icon: ReceiptText },
   { href: "/reports", label: "Reports", icon: ChartColumn },
@@ -34,7 +34,7 @@ const secondaryItems: NavItem[] = [
 const allItems = [...primaryItems, ...secondaryItems];
 
 function isActive(href: string, pathname: string) {
-  if (href === "/") return pathname === "/" || pathname.startsWith("/cash-");
+  if (href === "/dashboard") return pathname === "/dashboard" || pathname.startsWith("/cash-");
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
@@ -50,7 +50,7 @@ export function Sidebar({ account }: { account: ReactNode }) {
   return (
     <aside className="sticky top-0 hidden h-svh flex-col bg-night px-4 py-6 text-night-ink lg:flex">
       <Link
-        href="/"
+        href="/dashboard"
         className="px-3 pb-10 font-display text-[3.5rem] font-light leading-none tracking-[-0.04em]"
       >
         CICO

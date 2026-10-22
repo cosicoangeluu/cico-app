@@ -7,9 +7,9 @@ import {
 } from "@/lib/env";
 import { DEMO_COOKIE, demoAvailable } from "@/lib/demo/mode";
 
-/** Pages reachable without signing in: sign-in and the sender's upload page. */
+/** Public introduction, sign-in and the sender's upload page. */
 function isPublicPath(pathname: string) {
-  return pathname === "/login" || pathname.startsWith("/send/");
+  return pathname === "/" || pathname === "/login" || pathname.startsWith("/send/");
 }
 
 /**
@@ -60,7 +60,7 @@ export async function updateSession(request: NextRequest) {
   }
 
   if (signedIn && pathname === "/login") {
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   return response;
